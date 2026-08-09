@@ -18,7 +18,7 @@
 <meta content="Montañeras, BMX e infantiles." name="twitter:description"/>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="css/tailwind.css?v=10" rel="stylesheet"/>
+<link href="css/tailwind.css?v=11" rel="stylesheet"/>
 <style>
         /* Custom scrollbar for dark mode */
         ::-webkit-scrollbar {
@@ -152,6 +152,61 @@
 <span class="material-symbols-outlined text-[12px] text-background opacity-0 peer-checked:opacity-100 font-bold">check</span>
 </div>
 <span class="font-body-md text-body-md text-on-surface-variant group-hover:text-on-surface transition-colors">Accesorios</span>
+</label>
+</div>
+</div>
+<!-- Tipo de Accesorio Filter (solo visible cuando Accesorios está activo) -->
+<div class="border-b border-outline-variant/20 pb-4 hidden" id="subcategory-filter-block">
+<h4 class="font-label-md text-label-md text-secondary-fixed mb-3">Tipo de Accesorio</h4>
+<div class="space-y-2" id="subcategory-filters">
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="peer sr-only subcat-filter" data-subcat="pedales" type="checkbox"/>
+<div class="w-4 h-4 rounded border border-primary-container peer-checked:bg-secondary-fixed peer-checked:border-secondary-fixed flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined text-[12px] text-background opacity-0 peer-checked:opacity-100 font-bold">check</span>
+</div>
+<span class="font-body-md text-body-md text-on-surface-variant group-hover:text-on-surface transition-colors">Pedales</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="peer sr-only subcat-filter" data-subcat="mazas" type="checkbox"/>
+<div class="w-4 h-4 rounded border border-primary-container peer-checked:bg-secondary-fixed peer-checked:border-secondary-fixed flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined text-[12px] text-background opacity-0 peer-checked:opacity-100 font-bold">check</span>
+</div>
+<span class="font-body-md text-body-md text-on-surface-variant group-hover:text-on-surface transition-colors">Mazas</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="peer sr-only subcat-filter" data-subcat="catalinas" type="checkbox"/>
+<div class="w-4 h-4 rounded border border-primary-container peer-checked:bg-secondary-fixed peer-checked:border-secondary-fixed flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined text-[12px] text-background opacity-0 peer-checked:opacity-100 font-bold">check</span>
+</div>
+<span class="font-body-md text-body-md text-on-surface-variant group-hover:text-on-surface transition-colors">Catalinas</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="peer sr-only subcat-filter" data-subcat="pinones" type="checkbox"/>
+<div class="w-4 h-4 rounded border border-primary-container peer-checked:bg-secondary-fixed peer-checked:border-secondary-fixed flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined text-[12px] text-background opacity-0 peer-checked:opacity-100 font-bold">check</span>
+</div>
+<span class="font-body-md text-body-md text-on-surface-variant group-hover:text-on-surface transition-colors">Piñones</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="peer sr-only subcat-filter" data-subcat="infladores" type="checkbox"/>
+<div class="w-4 h-4 rounded border border-primary-container peer-checked:bg-secondary-fixed peer-checked:border-secondary-fixed flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined text-[12px] text-background opacity-0 peer-checked:opacity-100 font-bold">check</span>
+</div>
+<span class="font-body-md text-body-md text-on-surface-variant group-hover:text-on-surface transition-colors">Infladores</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="peer sr-only subcat-filter" data-subcat="frenos" type="checkbox"/>
+<div class="w-4 h-4 rounded border border-primary-container peer-checked:bg-secondary-fixed peer-checked:border-secondary-fixed flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined text-[12px] text-background opacity-0 peer-checked:opacity-100 font-bold">check</span>
+</div>
+<span class="font-body-md text-body-md text-on-surface-variant group-hover:text-on-surface transition-colors">Frenos</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="peer sr-only subcat-filter" data-subcat="herramientas" type="checkbox"/>
+<div class="w-4 h-4 rounded border border-primary-container peer-checked:bg-secondary-fixed peer-checked:border-secondary-fixed flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined text-[12px] text-background opacity-0 peer-checked:opacity-100 font-bold">check</span>
+</div>
+<span class="font-body-md text-body-md text-on-surface-variant group-hover:text-on-surface transition-colors">Herramientas</span>
 </label>
 </div>
 </div>
@@ -310,24 +365,20 @@
 
         // --- Catálogo dinámico ---
         const categoryLabels = {
-            ruta: 'Bicicletas de Ruta / Gravel',
             mtb: 'Bicicletas Montañeras (MTB)',
-            componentes: 'Componentes',
             accesorios: 'Accesorios y Repuestos',
-            urbana: 'Bicicletas Urbanas',
-            electrica: 'Bicicletas Eléctricas',
-            plegable: 'Bicicletas Plegables',
             ninos: 'Bicicletas Infantiles',
             bmx: 'Bicicletas BMX'
         };
 
         function getFilterState() {
             const checked = Array.from(document.querySelectorAll('.cat-filter:checked')).map((el) => el.dataset.cat);
+            const checkedSubcats = Array.from(document.querySelectorAll('.subcat-filter:checked')).map((el) => el.dataset.subcat);
             const search = (document.getElementById('search-input-desktop').value || document.getElementById('search-input-mobile').value || '').toLowerCase();
             const min = parseFloat(document.getElementById('price-min').value) || 0;
             const max = parseFloat(document.getElementById('price-max').value) || Infinity;
             const sort = document.getElementById('sort-select').value;
-            return { checked, search, min, max, sort };
+            return { checked, checkedSubcats, search, min, max, sort };
         }
 
         function cardPriceLabel(p) {
@@ -389,12 +440,23 @@
                 if (box) box.checked = true;
             }
 
-            const { checked, search, min, max, sort } = getFilterState();
+            const { checked, checkedSubcats, search, min, max, sort } = getFilterState();
+
+            const subcatBlock = document.getElementById('subcategory-filter-block');
+            if (checked.includes('accesorios')) {
+                subcatBlock.classList.remove('hidden');
+            } else {
+                subcatBlock.classList.add('hidden');
+                document.querySelectorAll('.subcat-filter:checked').forEach((el) => { el.checked = false; });
+                checkedSubcats.length = 0;
+            }
+
             let products = BICIFAST_PRODUCTS.filter((p) => {
                 const matchesCat = checked.length === 0 ? true : checked.includes(p.category);
+                const matchesSubcat = checkedSubcats.length === 0 ? true : checkedSubcats.includes(p.subcategory);
                 const matchesSearch = search ? (p.name + ' ' + p.brand).toLowerCase().includes(search) : true;
                 const matchesPrice = p.price >= min && p.price <= max;
-                return matchesCat && matchesSearch && matchesPrice;
+                return matchesCat && matchesSubcat && matchesSearch && matchesPrice;
             });
 
             if (sort === 'price-asc') products = products.slice().sort((a, b) => a.price - b.price);
@@ -416,6 +478,7 @@
         }
 
         document.querySelectorAll('.cat-filter').forEach((el) => el.addEventListener('change', renderCatalog));
+        document.querySelectorAll('.subcat-filter').forEach((el) => el.addEventListener('change', renderCatalog));
         document.getElementById('search-input-desktop').addEventListener('input', renderCatalog);
         document.getElementById('search-input-mobile').addEventListener('input', renderCatalog);
         document.getElementById('price-min').addEventListener('input', renderCatalog);
