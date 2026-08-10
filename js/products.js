@@ -1014,6 +1014,28 @@ const BICIFAST_PRODUCTS = [
     unavailableSizes: [],
     specs: { "Uso": "Extraer y ajustar cadena", "Marca": "Parktool" },
     installments: null
+  },
+  {
+    id: "inflador-atom-tw",
+    name: "Inflador Atom TW",
+    brand: "Atom",
+    category: "accesorios",
+    categoryLabel: "Accesorios y Repuestos",
+    subcategory: "infladores",
+    price: 35,
+    oldPrice: null,
+    badge: null,
+    rating: 4.6,
+    reviews: 2,
+    short: "Inflador Atom TW, cuerpo de aluminio, práctico, versátil y muy resistente.",
+    description: "Inflador Atom TW, cuerpo de aluminio, de buena calidad y alta resistencia. Práctico, versátil y de excelente desempeño.",
+    image: "img/productos/accesorios/inflador-atom-tw.jpg",
+    gallery: ["img/productos/accesorios/inflador-atom-tw.jpg"],
+    colors: [],
+    sizes: [],
+    unavailableSizes: [],
+    specs: { "Cuerpo": "Aluminio", "Tipo": "Portátil" },
+    installments: null
   }
 ];
 
