@@ -1,52 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://bicifast.vercel.app/</loc>
+    <loc>https://bicifast.ceccawebs.workers.dev/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://bicifast.vercel.app/catalogo.html</loc>
+    <loc>https://bicifast.ceccawebs.workers.dev/catalogo.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://bicifast.vercel.app/producto.html</loc>
+    <loc>https://bicifast.ceccawebs.workers.dev/producto.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://bicifast.vercel.app/ofertas.html</loc>
+    <loc>https://bicifast.ceccawebs.workers.dev/ofertas.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://bicifast.vercel.app/garantia.html</loc>
+    <loc>https://bicifast.ceccawebs.workers.dev/garantia.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://bicifast.vercel.app/envios.html</loc>
+    <loc>https://bicifast.ceccawebs.workers.dev/envios.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://bicifast.vercel.app/contacto.html</loc>
+    <loc>https://bicifast.ceccawebs.workers.dev/contacto.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://bicifast.vercel.app/taller.html</loc>
+    <loc>https://bicifast.ceccawebs.workers.dev/taller.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://bicifast.vercel.app/terminos.html</loc>
+    <loc>https://bicifast.ceccawebs.workers.dev/terminos.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
-    <loc>https://bicifast.vercel.app/privacidad.html</loc>
+    <loc>https://bicifast.ceccawebs.workers.dev/privacidad.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.1</priority>
   </url>
