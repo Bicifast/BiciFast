@@ -8,13 +8,13 @@
 <title>Ficha de Producto | BiciFast</title>
 <meta content="Descubre esta bicicleta en BiciFast, con envío a todo el Perú y hasta 12 cuotas sin intereses." name="description" id="meta-description"/>
 <meta content="index, follow" name="robots"/>
-<link href="https://bicifast.ceccawebs.workers.dev/producto.html" id="canonical-link" rel="canonical"/>
+<link href="https://bicifast.bicifastpe.workers.dev/producto.html" id="canonical-link" rel="canonical"/>
 <meta content="product" property="og:type" id="og-type"/>
 <meta content="BiciFast" property="og:site_name"/>
 <meta content="es_PE" property="og:locale"/>
 <meta content="Ficha de Producto | BiciFast" property="og:title" id="og-title"/>
 <meta content="Descubre esta bicicleta en BiciFast, con envío a todo el Perú." property="og:description" id="og-description"/>
-<meta content="https://bicifast.ceccawebs.workers.dev/producto.html" property="og:url" id="og-url"/>
+<meta content="https://bicifast.bicifastpe.workers.dev/producto.html" property="og:url" id="og-url"/>
 <meta content="" property="og:image" id="og-image"/>
 <meta content="summary_large_image" name="twitter:card"/>
 <meta content="Ficha de Producto | BiciFast" name="twitter:title" id="twitter-title"/>
@@ -313,10 +313,10 @@
         }
 
         function updateSEO() {
-            const pageUrl = `https://bicifast.ceccawebs.workers.dev/producto.html?id=${product.id}`;
+            const pageUrl = `https://bicifast.bicifastpe.workers.dev/producto.html?id=${product.id}`;
             const seoTitle = `${product.name} - ${product.categoryLabel} | BiciFast`;
             const seoDescription = product.short || product.description;
-            const absoluteImage = new URL(product.image, 'https://bicifast.ceccawebs.workers.dev/').href;
+            const absoluteImage = new URL(product.image, 'https://bicifast.bicifastpe.workers.dev/').href;
 
             document.title = seoTitle;
             document.getElementById('meta-description').setAttribute('content', seoDescription);
@@ -335,7 +335,7 @@
                 "brand": { "@type": "Brand", "name": product.brand },
                 "category": product.categoryLabel,
                 "description": product.description,
-                "image": (product.gallery && product.gallery.length ? product.gallery : [product.image]).map((src) => new URL(src, 'https://bicifast.ceccawebs.workers.dev/').href),
+                "image": (product.gallery && product.gallery.length ? product.gallery : [product.image]).map((src) => new URL(src, 'https://bicifast.bicifastpe.workers.dev/').href),
                 "offers": {
                     "@type": "Offer",
                     "url": pageUrl,

@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /carrito.html
 
-Sitemap: https://bicifast.ceccawebs.workers.dev/sitemap.xml
+Sitemap: https://bicifast.bicifastpe.workers.dev/sitemap.xml
