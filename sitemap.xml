@@ -1,52 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://bicifast.bicifastpe.workers.dev/</loc>
+    <loc>https://bicifast.pro/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://bicifast.bicifastpe.workers.dev/catalogo.html</loc>
+    <loc>https://bicifast.pro/catalogo.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://bicifast.bicifastpe.workers.dev/producto.html</loc>
+    <loc>https://bicifast.pro/producto.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://bicifast.bicifastpe.workers.dev/ofertas.html</loc>
+    <loc>https://bicifast.pro/ofertas.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://bicifast.bicifastpe.workers.dev/garantia.html</loc>
+    <loc>https://bicifast.pro/garantia.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://bicifast.bicifastpe.workers.dev/envios.html</loc>
+    <loc>https://bicifast.pro/envios.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://bicifast.bicifastpe.workers.dev/contacto.html</loc>
+    <loc>https://bicifast.pro/contacto.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://bicifast.bicifastpe.workers.dev/taller.html</loc>
+    <loc>https://bicifast.pro/taller.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://bicifast.bicifastpe.workers.dev/terminos.html</loc>
+    <loc>https://bicifast.pro/terminos.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
-    <loc>https://bicifast.bicifastpe.workers.dev/privacidad.html</loc>
+    <loc>https://bicifast.pro/privacidad.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.1</priority>
   </url>
