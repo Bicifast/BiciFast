@@ -6,7 +6,7 @@
 <link href="img/logo/favicon-32.png" rel="icon" type="image/png"/>
 <link href="img/logo/favicon-180.png" rel="apple-touch-icon"/>
 <title>Ficha de Producto | BiciFast</title>
-<meta content="Descubre esta bicicleta en BiciFast, con envío a todo el Perú y hasta 12 cuotas sin intereses." name="description" id="meta-description"/>
+<meta content="Descubre esta bicicleta en BiciFast, con envío a todo el Perú y atención directa por WhatsApp." name="description" id="meta-description"/>
 <meta content="index, follow" name="robots"/>
 <link href="https://bicifast.pro/producto.html" id="canonical-link" rel="canonical"/>
 <meta content="product" property="og:type" id="og-type"/>
@@ -75,10 +75,6 @@
 <div class="flex items-end gap-3 mt-2">
 <span class="font-headline-xl text-headline-xl text-secondary-fixed tracking-tight" id="product-price"></span>
 <span class="font-body-md text-body-md text-on-surface-variant line-through mb-1" id="product-old-price"></span>
-</div>
-<div class="bg-surface-container rounded-lg p-3 mt-2 border border-secondary-fixed/20 flex items-center gap-3" id="installments-box">
-<span class="material-symbols-outlined text-secondary-fixed">credit_card</span>
-<p class="font-label-md text-label-md text-on-surface" id="installments-text"></p>
 </div>
 </section>
 <!-- Selectors -->
@@ -224,15 +220,6 @@ Agregar al Carrito
             document.getElementById('product-price').textContent = formatPEN(getCurrentPrice());
             const oldPrice = getCurrentOldPrice();
             document.getElementById('product-old-price').textContent = oldPrice ? formatPEN(oldPrice) : '';
-            const installmentsBox = document.getElementById('installments-box');
-            if (product.installments) {
-                const months = parseInt((product.installments.match(/\d+/) || [12])[0], 10);
-                const monthly = getCurrentPrice() / months;
-                document.getElementById('installments-text').textContent = `${product.installments} de ${formatPEN(monthly)}`;
-                installmentsBox.classList.remove('hidden');
-            } else {
-                installmentsBox.classList.add('hidden');
-            }
         }
 
         function renderColors() {

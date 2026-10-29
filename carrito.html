@@ -107,12 +107,6 @@
 <span class="font-label-md text-label-md text-secondary">Yape / Plin</span>
 </label>
 <label class="flex flex-col items-center justify-center p-4 rounded-lg border border-[#ffffff10] bg-surface-container-high cursor-pointer hover:bg-surface-variant transition-colors group relative overflow-hidden">
-<input class="peer sr-only" name="payment" type="radio" value="card"/>
-<div class="absolute inset-0 border-2 border-transparent peer-checked:border-secondary-fixed rounded-lg transition-colors"></div>
-<span class="material-symbols-outlined text-on-surface-variant group-hover:text-secondary-fixed peer-checked:text-secondary-fixed mb-2 text-3xl">credit_card</span>
-<span class="font-label-md text-label-md text-secondary">Tarjetas</span>
-</label>
-<label class="flex flex-col items-center justify-center p-4 rounded-lg border border-[#ffffff10] bg-surface-container-high cursor-pointer hover:bg-surface-variant transition-colors group relative overflow-hidden col-span-2">
 <input class="peer sr-only" name="payment" type="radio" value="transfer"/>
 <div class="absolute inset-0 border-2 border-transparent peer-checked:border-secondary-fixed rounded-lg transition-colors"></div>
 <span class="material-symbols-outlined text-on-surface-variant group-hover:text-secondary-fixed peer-checked:text-secondary-fixed mb-2 text-3xl">account_balance</span>
@@ -124,7 +118,7 @@
 <section class="flex items-center justify-center gap-4 py-4 opacity-70">
 <div class="flex items-center gap-1">
 <span class="material-symbols-outlined text-secondary-fixed" style="font-variation-settings: 'FILL' 1;">lock</span>
-<span class="font-label-sm text-label-sm text-on-surface-variant">Pago 100% Seguro</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Te confirmamos por WhatsApp</span>
 </div>
 <div class="w-px h-4 bg-outline-variant"></div>
 <div class="flex items-center gap-1">
@@ -224,7 +218,7 @@
         });
 
         const WHATSAPP_NUMBER = '51993496607';
-        const PAYMENT_LABELS = { yape: 'Yape / Plin', card: 'Tarjeta', transfer: 'Transferencia bancaria' };
+        const PAYMENT_LABELS = { yape: 'Yape / Plin', transfer: 'Transferencia bancaria' };
 
         function buildOrderMessage() {
             const lines = getCartDetailed().map((item) => {
