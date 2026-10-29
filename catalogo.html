@@ -426,9 +426,7 @@
                         <a href="producto.html?id=${p.id}"><h3 class="font-label-md text-label-md text-secondary mb-2 line-clamp-2">${p.name}</h3></a>
                         <div class="mt-auto pt-4 flex justify-between items-center">
                             <p class="font-headline-md text-secondary-fixed text-lg">${cardPriceLabel(p)}</p>
-                            <button class="bg-surface-variant text-on-surface hover:bg-secondary-fixed hover:text-background w-8 h-8 rounded-full flex items-center justify-center transition-colors" onclick="addToCart('${p.id}'); event.stopPropagation();">
-                                <span class="material-symbols-outlined text-sm">add_shopping_cart</span>
-                            </button>
+                            <a href="producto.html?id=${p.id}" class="bg-surface-variant text-on-surface hover:bg-secondary-fixed hover:text-background font-label-sm text-label-sm px-3 py-2 rounded-full transition-colors flex-shrink-0 text-center">Elegir modelo</a>
                         </div>
                     </div>
                 </div>`;
