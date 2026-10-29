@@ -136,8 +136,9 @@
 <!-- Order confirmed state (hidden by default) -->
 <main class="hidden pt-24 px-container-margin-mobile max-w-lg mx-auto flex-col items-center text-center gap-stack-md" id="confirmed-main">
 <span class="material-symbols-outlined text-secondary-fixed" style="font-size:64px; font-variation-settings: 'FILL' 1;">check_circle</span>
-<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-secondary">¡Pedido confirmado!</h1>
-<p class="font-body-md text-body-md text-on-surface-variant">Gracias por tu compra. Te contactaremos por WhatsApp para coordinar el pago y la entrega.</p>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-secondary">¡Casi listo!</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Envía tu pedido por WhatsApp para que lo recibamos y coordinemos el pago y la entrega. Si no se abrió automáticamente, toca el botón.</p>
+<a class="border-2 border-secondary-fixed text-secondary-fixed font-label-md text-label-md px-8 py-3 rounded-lg font-bold" id="whatsapp-resend" href="#" target="_blank" rel="noopener">Abrir WhatsApp</a>
 <a class="bg-secondary-fixed text-background font-label-md text-label-md px-8 py-3 rounded-lg font-bold mt-4" href="index.html">Volver al inicio</a>
 </main>
 <!-- Fixed Bottom Action Area -->
@@ -222,8 +223,32 @@
             radio.addEventListener('change', renderCart);
         });
 
+        const WHATSAPP_NUMBER = '51993496607';
+        const PAYMENT_LABELS = { yape: 'Yape / Plin', card: 'Tarjeta', transfer: 'Transferencia bancaria' };
+
+        function buildOrderMessage() {
+            const lines = getCartDetailed().map((item) => {
+                const meta = [item.variant, item.color, item.size].filter(Boolean).join(', ');
+                return `• ${item.qty} x ${item.product.name}${meta ? ' (' + meta + ')' : ''} - ${formatPEN(getItemUnitPrice(item) * item.qty)}`;
+            });
+            const shippingValue = document.querySelector('input[name="shipping"]:checked').value;
+            const payment = document.querySelector('input[name="payment"]:checked').value;
+            return [
+                'Hola BiciFast, quiero hacer este pedido:',
+                '',
+                ...lines,
+                '',
+                `Envío: ${shippingValue === 'lima' ? 'Lima Metropolitana' : 'Provincias'} - ${formatPEN(getShippingCost())}`,
+                `Pago preferido: ${PAYMENT_LABELS[payment]}`,
+                `Total: ${formatPEN(getCartSubtotal() + getShippingCost())}`,
+            ].join('\n');
+        }
+
         document.getElementById('confirm-order-btn').addEventListener('click', () => {
             if (getCartCount() === 0) return;
+            const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(buildOrderMessage())}`;
+            window.open(url, '_blank');
+            document.getElementById('whatsapp-resend').href = url;
             clearCart();
             document.getElementById('checkout-main').classList.add('hidden');
             document.getElementById('bottom-action-bar').classList.add('hidden');
