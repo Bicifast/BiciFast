@@ -25,6 +25,28 @@
       min-height: max(884px, 100dvh);
     }
   </style>
+<style>
+    .bf-form { display: grid; gap: 12px; }
+    .bf-field { display: flex; flex-direction: column; gap: 6px; }
+    .bf-field[hidden] { display: none; }
+    .bf-field label { font-size: .8rem; color: #c5c9ca; }
+    .bf-field input { background: #2b3032; border: 1px solid rgba(255,255,255,.12); border-radius: 8px; padding: 12px; color: #e0e3e4; font-size: 16px; width: 100%; }
+    .bf-field input:focus { outline: 2px solid #cdf200; outline-offset: 1px; }
+    .bf-card { background: #1d2122; border: 1px solid rgba(255,255,255,.1); border-radius: 12px; padding: 16px; text-align: left; width: 100%; display: flex; flex-direction: column; gap: 10px; }
+    .bf-step-title { font-weight: 700; color: #e0e3e4; font-size: 1rem; }
+    .bf-accent { color: #cdf200; }
+    .bf-note { font-size: .85rem; color: #9aa3a5; }
+    .bf-note b { color: #e0e3e4; }
+    .bf-qr { width: min(260px, 70%); margin: 4px auto; border-radius: 12px; display: block; }
+    .bf-pay-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,.08); }
+    .bf-label { font-size: .75rem; color: #9aa3a5; }
+    .bf-value { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .95rem; color: #e0e3e4; word-break: break-all; }
+    .bf-copy { flex: none; border: 1px solid #cdf200; color: #cdf200; background: transparent; border-radius: 999px; padding: 6px 14px; font-size: .8rem; font-weight: 600; cursor: pointer; }
+    .bf-btn { display: flex; justify-content: center; align-items: center; width: 100%; padding: 14px 16px; border-radius: 10px; font-weight: 700; text-align: center; text-decoration: none; }
+    .bf-btn-primary { background: #cdf200; color: #101415; }
+    .bf-btn-outline { border: 2px solid #cdf200; color: #cdf200; }
+    .bf-link { color: #9aa3a5; text-decoration: underline; padding: 8px; margin-bottom: 24px; }
+  </style>
   </head>
 <body class="antialiased min-h-screen pb-32">
 <!-- TopAppBar -->
@@ -93,6 +115,20 @@
 </label>
 </div>
 </section>
+<!-- Delivery data -->
+<section class="level-1 rounded-xl p-6">
+<h2 class="font-headline-md text-headline-md text-secondary mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary-fixed">person_pin_circle</span>
+                Datos de Entrega
+            </h2>
+<form class="bf-form" id="delivery-form" novalidate onsubmit="return false">
+<div class="bf-field"><label for="f-name">Nombre completo</label><input autocomplete="name" id="f-name" name="name" required type="text"/></div>
+<div class="bf-field"><label for="f-phone">Celular / WhatsApp</label><input autocomplete="tel" id="f-phone" inputmode="tel" minlength="9" name="phone" required type="tel"/></div>
+<div class="bf-field"><label for="f-address" id="label-address">Dirección y distrito</label><input autocomplete="street-address" id="f-address" name="address" required type="text"/></div>
+<div class="bf-field" hidden id="field-dni"><label for="f-dni">DNI</label><input id="f-dni" inputmode="numeric" maxlength="8" minlength="8" name="dni" pattern="[0-9]{8}" type="text"/></div>
+<div class="bf-field" hidden id="field-agency"><label for="f-agency">Agencia de envío preferida (Olva, Shalom, etc.)</label><input id="f-agency" name="agency" type="text"/></div>
+</form>
+</section>
 <!-- Payment Methods -->
 <section class="level-1 rounded-xl p-6">
 <h2 class="font-headline-md text-headline-md text-secondary mb-4 flex items-center gap-2">
@@ -129,11 +165,28 @@
 </main>
 <!-- Order confirmed state (hidden by default) -->
 <main class="hidden pt-24 px-container-margin-mobile max-w-lg mx-auto flex-col items-center text-center gap-stack-md" id="confirmed-main">
-<span class="material-symbols-outlined text-secondary-fixed" style="font-size:64px; font-variation-settings: 'FILL' 1;">check_circle</span>
-<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-secondary">¡Casi listo!</h1>
-<p class="font-body-md text-body-md text-on-surface-variant">Envía tu pedido por WhatsApp para que lo recibamos y coordinemos el pago y la entrega. Si no se abrió automáticamente, toca el botón.</p>
-<a class="border-2 border-secondary-fixed text-secondary-fixed font-label-md text-label-md px-8 py-3 rounded-lg font-bold" id="whatsapp-resend" href="#" target="_blank" rel="noopener">Abrir WhatsApp</a>
-<a class="bg-secondary-fixed text-background font-label-md text-label-md px-8 py-3 rounded-lg font-bold mt-4" href="index.html">Volver al inicio</a>
+<span class="material-symbols-outlined text-secondary-fixed" style="font-size:56px; font-variation-settings: 'FILL' 1;">check_circle</span>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-secondary">Pedido <span id="order-id"></span></h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Son 3 pasos rápidos para que preparemos tu bicicleta.</p>
+<div class="bf-card">
+<p class="bf-step-title">1. Envía tu pedido por WhatsApp</p>
+<p class="bf-note">Se abrió automáticamente. Si no, toca el botón. <b>Tu pedido solo nos llega cuando lo envías.</b></p>
+<a class="bf-btn bf-btn-outline" href="#" id="whatsapp-resend" rel="noopener" target="_blank">Enviar pedido por WhatsApp</a>
+</div>
+<div class="bf-card">
+<p class="bf-step-title">2. Paga <span class="bf-accent" id="pay-total"></span></p>
+<p class="bf-note">Elige una opción y paga el monto exacto. Los números se copian sin guiones.</p>
+<img alt="Código QR para pagar a Representaciones Bicifast" class="bf-qr" height="1269" src="img/pagos/qr-bicifast.jpg" width="984"/>
+<div class="bf-pay-row"><div><p class="bf-label">Yape / Plin</p><p class="bf-value">955 201 833</p></div><button class="bf-copy" data-copy="955201833" type="button">Copiar</button></div>
+<div class="bf-pay-row"><div><p class="bf-label">BCP · Cuenta</p><p class="bf-value">191-2606157-0-17</p></div><button class="bf-copy" data-copy="1912606157017" type="button">Copiar</button></div>
+<div class="bf-pay-row"><div><p class="bf-label">Interbank · Cuenta</p><p class="bf-value">001-3008213116</p></div><button class="bf-copy" data-copy="0013008213116" type="button">Copiar</button></div>
+</div>
+<div class="bf-card">
+<p class="bf-step-title">3. Avísanos cuando pagues</p>
+<p class="bf-note">Toca el botón y adjunta la captura de tu pago en el chat. Así preparamos tu pedido.</p>
+<a class="bf-btn bf-btn-primary" href="#" id="whatsapp-proof" rel="noopener" target="_blank">Ya pagué, enviar comprobante</a>
+</div>
+<a class="bf-link" href="index.html">Volver al inicio</a>
 </main>
 <!-- Fixed Bottom Action Area -->
 <div class="fixed bottom-0 left-0 w-full bg-surface-container border-t border-outline-variant p-3 md:p-4 z-40 shadow-[0_-10px_40px_rgba(0,0,0,0.5)]" id="bottom-action-bar">
@@ -214,43 +267,104 @@
         }
 
         document.querySelectorAll('input[name="shipping"]').forEach((radio) => {
-            radio.addEventListener('change', renderCart);
+            radio.addEventListener('change', () => { renderCart(); syncDeliveryFields(); });
         });
 
         const WHATSAPP_NUMBER = '51993496607';
         const PAYMENT_LABELS = { yape: 'Yape / Plin', transfer: 'Transferencia bancaria' };
+        const ORDER_KEY = 'bicifast_last_order';
 
-        function buildOrderMessage() {
-            const lines = getCartDetailed().map((item) => {
+        function syncDeliveryFields() {
+            const provincia = document.querySelector('input[name="shipping"]:checked').value === 'provincia';
+            const f = document.getElementById('delivery-form').elements;
+            document.getElementById('field-dni').hidden = !provincia;
+            document.getElementById('field-agency').hidden = !provincia;
+            f.dni.required = provincia;
+            f.agency.required = provincia;
+            document.getElementById('label-address').textContent = provincia ? 'Ciudad, distrito y dirección' : 'Dirección y distrito';
+        }
+
+        function newOrderId() {
+            const d = new Date();
+            const p = (n) => String(n).padStart(2, '0');
+            return `BF-${p(d.getDate())}${p(d.getMonth() + 1)}-${p(d.getHours())}${p(d.getMinutes())}${Math.floor(Math.random() * 90 + 10)}`;
+        }
+
+        function waUrl(text) {
+            return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+        }
+
+        function buildOrderMessage(orderId, total) {
+            const f = document.getElementById('delivery-form').elements;
+            const v = (name) => f[name].value.trim();
+            const provincia = document.querySelector('input[name="shipping"]:checked').value === 'provincia';
+            const payment = document.querySelector('input[name="payment"]:checked').value;
+            const items = getCartDetailed().map((item) => {
                 const meta = [item.variant, item.color, item.size].filter(Boolean).join(', ');
                 return `• ${item.qty} x ${item.product.name}${meta ? ' (' + meta + ')' : ''} - ${formatPEN(getItemUnitPrice(item) * item.qty)}`;
             });
-            const shippingValue = document.querySelector('input[name="shipping"]:checked').value;
-            const payment = document.querySelector('input[name="payment"]:checked').value;
             return [
-                'Hola BiciFast, quiero hacer este pedido:',
+                `Hola BiciFast, quiero hacer este pedido *${orderId}*:`,
                 '',
-                ...lines,
+                ...items,
                 '',
-                `Envío: ${shippingValue === 'lima' ? 'Lima Metropolitana' : 'Provincias'} - ${formatPEN(getShippingCost())}`,
+                '*Datos de entrega*',
+                `Nombre: ${v('name')}`,
+                `Celular: ${v('phone')}`,
+                `Dirección: ${v('address')}`,
+                ...(provincia ? [`DNI: ${v('dni')}`, `Agencia: ${v('agency')}`] : []),
+                '',
+                `Envío: ${provincia ? 'Provincias' : 'Lima Metropolitana'} - ${formatPEN(getShippingCost())}`,
                 `Pago preferido: ${PAYMENT_LABELS[payment]}`,
-                `Total: ${formatPEN(getCartSubtotal() + getShippingCost())}`,
+                `*Total: ${total}*`,
             ].join('\n');
         }
 
-        document.getElementById('confirm-order-btn').addEventListener('click', () => {
-            if (getCartCount() === 0) return;
-            const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(buildOrderMessage())}`;
-            window.open(url, '_blank');
-            document.getElementById('whatsapp-resend').href = url;
-            clearCart();
+        function buildProofMessage(order) {
+            return `Hola BiciFast, ya realicé el pago del pedido *${order.id}* por *${order.total}* (${order.method}). Adjunto mi captura de pago.`;
+        }
+
+        function showConfirmation(order) {
+            document.getElementById('order-id').textContent = order.id;
+            document.getElementById('pay-total').textContent = order.total;
+            document.getElementById('whatsapp-resend').href = order.orderUrl;
+            document.getElementById('whatsapp-proof').href = order.proofUrl;
             document.getElementById('checkout-main').classList.add('hidden');
             document.getElementById('bottom-action-bar').classList.add('hidden');
             const confirmed = document.getElementById('confirmed-main');
             confirmed.classList.remove('hidden');
             confirmed.classList.add('flex');
+        }
+
+        document.querySelectorAll('[data-copy]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const copied = navigator.clipboard ? navigator.clipboard.writeText(btn.dataset.copy) : Promise.reject();
+                copied.then(() => showToast('Copiado'), () => showToast('No se pudo copiar, escríbelo a mano'));
+            });
+        });
+
+        document.getElementById('confirm-order-btn').addEventListener('click', () => {
+            if (getCartCount() === 0) return;
+            if (!document.getElementById('delivery-form').reportValidity()) return;
+            const total = formatPEN(getCartSubtotal() + getShippingCost());
+            const order = {
+                id: newOrderId(),
+                total,
+                method: PAYMENT_LABELS[document.querySelector('input[name="payment"]:checked').value],
+            };
+            order.orderUrl = waUrl(buildOrderMessage(order.id, total));
+            order.proofUrl = waUrl(buildProofMessage(order));
+            try { sessionStorage.setItem(ORDER_KEY, JSON.stringify(order)); } catch (e) {}
+            window.open(order.orderUrl, '_blank');
+            clearCart();
+            showConfirmation(order);
         });
 
         renderCart();
+        syncDeliveryFields();
+        try {
+            const saved = JSON.parse(sessionStorage.getItem(ORDER_KEY));
+            if (saved && getCartCount() === 0) showConfirmation(saved);
+        } catch (e) {}
     </script>
 </body></html>
