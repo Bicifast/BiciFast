@@ -123,7 +123,7 @@
             </h2>
 <form class="bf-form" id="delivery-form" novalidate onsubmit="return false">
 <div class="bf-field"><label for="f-name">Nombre completo</label><input autocomplete="name" id="f-name" name="name" required type="text"/></div>
-<div class="bf-field"><label for="f-phone">Celular / WhatsApp</label><input autocomplete="tel" id="f-phone" inputmode="tel" minlength="9" name="phone" required type="tel"/></div>
+<div class="bf-field"><label for="f-phone">Celular / WhatsApp</label><input autocomplete="tel" id="f-phone" inputmode="tel" name="phone" pattern="[0-9+ \-]{9,18}" required title="Escribe tu número de celular, solo números" type="tel"/></div>
 <div class="bf-field"><label for="f-address" id="label-address">Dirección y distrito</label><input autocomplete="street-address" id="f-address" name="address" required type="text"/></div>
 <div class="bf-field" hidden id="field-dni"><label for="f-dni">DNI</label><input id="f-dni" inputmode="numeric" maxlength="8" minlength="8" name="dni" pattern="[0-9]{8}" type="text"/></div>
 <div class="bf-field" hidden id="field-agency"><label for="f-agency">Agencia de envío preferida (Olva, Shalom, etc.)</label><input id="f-agency" name="agency" type="text"/></div>
@@ -178,8 +178,11 @@
 <p class="bf-note">Elige una opción y paga el monto exacto. Los números se copian sin guiones.</p>
 <img alt="Código QR para pagar a Representaciones Bicifast" class="bf-qr" height="1269" src="img/pagos/qr-bicifast.jpg" width="984"/>
 <div class="bf-pay-row"><div><p class="bf-label">Yape / Plin</p><p class="bf-value">955 201 833</p></div><button class="bf-copy" data-copy="955201833" type="button">Copiar</button></div>
+<p class="bf-note">Titular de las cuentas: <b>Representaciones Bicifast</b></p>
 <div class="bf-pay-row"><div><p class="bf-label">BCP · Cuenta</p><p class="bf-value">191-2606157-0-17</p></div><button class="bf-copy" data-copy="1912606157017" type="button">Copiar</button></div>
+<div class="bf-pay-row"><div><p class="bf-label">BCP · CCI (desde otros bancos)</p><p class="bf-value">002-191-002606157017-57</p></div><button class="bf-copy" data-copy="00219100260615701757" type="button">Copiar</button></div>
 <div class="bf-pay-row"><div><p class="bf-label">Interbank · Cuenta</p><p class="bf-value">001-3008213116</p></div><button class="bf-copy" data-copy="0013008213116" type="button">Copiar</button></div>
+<div class="bf-pay-row"><div><p class="bf-label">Interbank · CCI (desde otros bancos)</p><p class="bf-value">003-001-003008213116-57</p></div><button class="bf-copy" data-copy="00300100300821311657" type="button">Copiar</button></div>
 </div>
 <div class="bf-card">
 <p class="bf-step-title">3. Avísanos cuando pagues</p>
