@@ -166,8 +166,9 @@
 <!-- Order confirmed state (hidden by default) -->
 <main class="hidden pt-24 px-container-margin-mobile max-w-lg mx-auto flex-col items-center text-center gap-stack-md" id="confirmed-main">
 <span class="material-symbols-outlined text-secondary-fixed" style="font-size:56px; font-variation-settings: 'FILL' 1;">check_circle</span>
-<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-secondary">Pedido <span id="order-id"></span></h1>
-<p class="font-body-md text-body-md text-on-surface-variant">Son 3 pasos rápidos para que preparemos tu bicicleta.</p>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-secondary" id="order-title"></h1>
+<p class="bf-note" hidden id="order-lines"></p>
+<p class="font-body-md text-body-md text-on-surface-variant">Son 3 pasos rápidos para que preparemos tu pedido.</p>
 <div class="bf-card">
 <p class="bf-step-title">1. Envía tu pedido por WhatsApp</p>
 <p class="bf-note">Se abrió automáticamente. Si no, toca el botón. <b>Tu pedido solo nos llega cuando lo envías.</b></p>
@@ -287,29 +288,33 @@
             document.getElementById('label-address').textContent = provincia ? 'Ciudad, distrito y dirección' : 'Dirección y distrito';
         }
 
-        function newOrderId() {
-            const d = new Date();
-            const p = (n) => String(n).padStart(2, '0');
-            return `BF-${p(d.getDate())}${p(d.getMonth() + 1)}-${p(d.getHours())}${p(d.getMinutes())}${Math.floor(Math.random() * 90 + 10)}`;
+        // Nombre tal como se ve al elegir la bici: modelo · color · aro (· talla)
+        function describeItem(item) {
+            const p = item.product;
+            const aro = !item.variant && p.specs && p.specs.Aro && !/aro/i.test(p.name) ? `Aro ${p.specs.Aro}` : null;
+            return [p.name, item.color, item.variant || aro, item.size].filter(Boolean).join(' · ');
+        }
+
+        function describeOrder(items) {
+            const first = items[0];
+            const name = `${first.qty > 1 && items.length === 1 ? first.qty + ' x ' : ''}${describeItem(first)}`;
+            return items.length > 1 ? `${name} y ${items.length - 1} más` : name;
         }
 
         function waUrl(text) {
             return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
         }
 
-        function buildOrderMessage(orderId, total) {
+        function buildOrderMessage(items, total) {
             const f = document.getElementById('delivery-form').elements;
             const v = (name) => f[name].value.trim();
             const provincia = document.querySelector('input[name="shipping"]:checked').value === 'provincia';
             const payment = document.querySelector('input[name="payment"]:checked').value;
-            const items = getCartDetailed().map((item) => {
-                const meta = [item.variant, item.color, item.size].filter(Boolean).join(', ');
-                return `• ${item.qty} x ${item.product.name}${meta ? ' (' + meta + ')' : ''} - ${formatPEN(getItemUnitPrice(item) * item.qty)}`;
-            });
+            const lines = items.map((item) => `• ${item.qty} x ${describeItem(item)} - ${formatPEN(getItemUnitPrice(item) * item.qty)}`);
             return [
-                `Hola BiciFast, quiero hacer este pedido *${orderId}*:`,
+                'Hola BiciFast, quiero hacer este pedido:',
                 '',
-                ...items,
+                ...lines,
                 '',
                 '*Datos de entrega*',
                 `Nombre: ${v('name')}`,
@@ -324,11 +329,14 @@
         }
 
         function buildProofMessage(order) {
-            return `Hola BiciFast, ya realicé el pago del pedido *${order.id}* por *${order.total}* (${order.method}). Adjunto mi captura de pago.`;
+            return `Hola BiciFast, ya realicé el pago de mi pedido (${order.title}) por *${order.total}* (${order.method}). Adjunto mi captura de pago.`;
         }
 
         function showConfirmation(order) {
-            document.getElementById('order-id').textContent = order.id;
+            document.getElementById('order-title').textContent = order.title;
+            const lines = document.getElementById('order-lines');
+            lines.hidden = order.lines.length < 2;
+            lines.replaceChildren(...order.lines.flatMap((line, i) => (i ? [document.createElement('br'), line] : [line])));
             document.getElementById('pay-total').textContent = order.total;
             document.getElementById('whatsapp-resend').href = order.orderUrl;
             document.getElementById('whatsapp-proof').href = order.proofUrl;
@@ -349,13 +357,15 @@
         document.getElementById('confirm-order-btn').addEventListener('click', () => {
             if (getCartCount() === 0) return;
             if (!document.getElementById('delivery-form').reportValidity()) return;
+            const items = getCartDetailed();
             const total = formatPEN(getCartSubtotal() + getShippingCost());
             const order = {
-                id: newOrderId(),
+                title: describeOrder(items),
+                lines: items.map((item) => `${item.qty} x ${describeItem(item)}`),
                 total,
                 method: PAYMENT_LABELS[document.querySelector('input[name="payment"]:checked').value],
             };
-            order.orderUrl = waUrl(buildOrderMessage(order.id, total));
+            order.orderUrl = waUrl(buildOrderMessage(items, total));
             order.proofUrl = waUrl(buildProofMessage(order));
             try { sessionStorage.setItem(ORDER_KEY, JSON.stringify(order)); } catch (e) {}
             window.open(order.orderUrl, '_blank');
@@ -367,7 +377,7 @@
         syncDeliveryFields();
         try {
             const saved = JSON.parse(sessionStorage.getItem(ORDER_KEY));
-            if (saved && getCartCount() === 0) showConfirmation(saved);
+            if (saved && saved.title && getCartCount() === 0) showConfirmation(saved);
         } catch (e) {}
     </script>
 </body></html>
