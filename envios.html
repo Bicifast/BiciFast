@@ -6,7 +6,7 @@
 <link href="img/logo/favicon-32.png" rel="icon" type="image/png"/>
 <link href="img/logo/favicon-180.png" rel="apple-touch-icon"/>
 <title>Envíos | BiciFast</title>
-<meta name="description" content="Costos y tiempos de entrega de BiciFast en Lima y provincias, con pago contra-entrega disponible."/>
+<meta name="description" content="Envíos de BiciFast a todo el Perú: el costo y el tiempo de entrega se coordinan por WhatsApp."/>
 <meta name="robots" content="index, follow"/>
 <link href="https://bicifast.pro/envios.html" rel="canonical"/>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
@@ -32,22 +32,23 @@
 </header>
 <main class="pt-32 pb-stack-xl px-container-margin-mobile md:px-container-margin-desktop max-w-3xl mx-auto">
 <h1 class="font-headline-lg text-headline-lg text-secondary mb-2">Envíos</h1>
-<p class="font-body-md text-body-md text-on-surface-variant mb-8">Llegamos a todo el Perú. Estos son nuestros costos y tiempos de entrega.</p>
+<p class="font-body-md text-body-md text-on-surface-variant mb-8">Llegamos a todo el Perú. El costo y el tiempo de entrega los coordinamos contigo directamente por WhatsApp.</p>
 
-<div class="bg-surface-container rounded-xl p-6 border border-outline-variant/30 mb-stack-md">
+<section class="bg-surface-container rounded-xl p-6 border border-outline-variant/30 mb-stack-md">
 <span class="material-symbols-outlined text-secondary-fixed text-3xl mb-2">local_shipping</span>
-<h2 class="font-headline-md text-headline-md text-secondary mb-1" id="ship-lima-label">Lima Metropolitana</h2>
-<p class="font-body-md text-body-md text-on-surface-variant mb-2" id="ship-lima-days"></p>
-<p class="font-label-md text-label-md text-secondary-fixed" id="ship-lima-price"></p>
-</div>
-
-<h2 class="font-headline-md text-headline-md text-secondary mb-1">Provincias</h2>
-<p class="font-body-md text-body-md text-on-surface-variant mb-4">Enviamos por agencia de transporte. El costo depende de la distancia desde Lima: eliges tu departamento al comprar y ves el monto exacto antes de pagar.</p>
-<div class="grid sm:grid-cols-2 gap-4 mb-stack-md" id="ship-zones"></div>
+<h2 class="font-headline-md text-headline-md text-secondary mb-3">Cómo funciona</h2>
+<ol class="font-body-md text-body-md text-on-surface-variant list-decimal space-y-2" style="padding-left:1.25rem">
+<li>Armas tu pedido y eliges si el envío es a Lima Metropolitana y Callao o a provincias.</li>
+<li>Nos lo envías por WhatsApp.</li>
+<li>Te respondemos con el costo de envío según tu destino, el tiempo estimado y el total final.</li>
+<li>Pagas el total confirmado y preparamos tu pedido.</li>
+</ol>
+<p class="font-body-md text-body-md text-on-surface-variant mt-4">En provincias enviamos por agencia de transporte (Olva, Shalom u otra que prefieras).</p>
+</section>
 
 <section class="bg-surface-container rounded-xl p-6 border border-outline-variant/30 mb-stack-md">
 <h2 class="font-headline-md text-headline-md text-secondary mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-secondary-fixed">payments</span>Pago contra-entrega</h2>
-<p class="font-body-md text-body-md text-on-surface-variant">En Lima puedes pagar en efectivo al recibir tu bicicleta. Para provincias, el pago se coordina antes del envío por agencia.</p>
+<p class="font-body-md text-body-md text-on-surface-variant">En Lima puedes pagar en efectivo al recibir tu bicicleta. Para provincias, el pago se hace antes del envío por agencia.</p>
 </section>
 
 <section class="bg-surface-container rounded-xl p-6 border border-outline-variant/30">
@@ -63,26 +64,4 @@ Consultar por WhatsApp
 <footer class="border-t border-outline-variant/30 py-stack-lg px-container-margin-mobile text-center">
 <p class="font-label-sm text-label-sm text-on-surface-variant">© 2026 BiciFast Perú. RUC 10426826793</p>
 </footer>
-<script src="js/shipping.js"></script>
-<script>
-  document.getElementById('ship-lima-label').textContent = SHIPPING_LIMA.label;
-  document.getElementById('ship-lima-days').textContent = SHIPPING_LIMA.days;
-  document.getElementById('ship-lima-price').textContent = 'S/ ' + SHIPPING_LIMA.price.toFixed(2);
-  const zones = document.getElementById('ship-zones');
-  SHIPPING_ZONES.forEach((zone) => {
-    const card = document.createElement('div');
-    card.className = 'bg-surface-container rounded-xl p-6 border border-outline-variant/30';
-    const price = document.createElement('p');
-    price.className = 'font-label-md text-label-md text-secondary-fixed mb-1';
-    price.textContent = 'S/ ' + zone.price.toFixed(2);
-    const days = document.createElement('p');
-    days.className = 'font-body-md text-body-md text-on-surface-variant mb-2';
-    days.textContent = zone.days;
-    const list = document.createElement('p');
-    list.className = 'font-label-sm text-label-sm text-secondary';
-    list.textContent = zone.departments.join(', ');
-    card.append(price, days, list);
-    zones.appendChild(card);
-  });
-</script>
 </body></html>
