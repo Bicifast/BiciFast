@@ -31,7 +31,9 @@
     .bf-field[hidden] { display: none; }
     .bf-field label { font-size: .8rem; color: #c5c9ca; }
     .bf-field input { background: #2b3032; border: 1px solid rgba(255,255,255,.12); border-radius: 8px; padding: 12px; color: #e0e3e4; font-size: 16px; width: 100%; }
-    .bf-field input:focus { outline: 2px solid #cdf200; outline-offset: 1px; }
+    .bf-field select { background: #2b3032; border: 1px solid rgba(255,255,255,.12); border-radius: 8px; padding: 12px; color: #e0e3e4; font-size: 16px; width: 100%; }
+    .bf-field input:focus, .bf-field select:focus { outline: 2px solid #cdf200; outline-offset: 1px; }
+    .bf-hint { font-size: .8rem; color: #9aa3a5; }
     .bf-card { background: #1d2122; border: 1px solid rgba(255,255,255,.1); border-radius: 12px; padding: 16px; text-align: left; width: 100%; display: flex; flex-direction: column; gap: 10px; }
     .bf-step-title { font-weight: 700; color: #e0e3e4; font-size: 1rem; }
     .bf-accent { color: #cdf200; }
@@ -100,19 +102,24 @@
 <label class="flex items-center gap-3 p-3 rounded-lg border border-[#ffffff10] bg-surface-container-high cursor-pointer hover:bg-surface-variant transition-colors">
 <input checked="" class="w-5 h-5 accent-[#cdf200]" name="shipping" type="radio" value="lima"/>
 <div class="flex-grow">
-<span class="block font-label-md text-label-md text-secondary">Lima Metropolitana</span>
-<span class="block font-label-sm text-label-sm text-on-surface-variant">1-2 días hábiles</span>
+<span class="block font-label-md text-label-md text-secondary" id="ship-lima-label">Lima Metropolitana</span>
+<span class="block font-label-sm text-label-sm text-on-surface-variant" id="ship-lima-days"></span>
 </div>
-<span class="font-label-md text-label-md text-secondary">S/ 15.00</span>
+<span class="font-label-md text-label-md text-secondary" id="ship-lima-price" style="white-space:nowrap"></span>
 </label>
 <label class="flex items-center gap-3 p-3 rounded-lg border border-[#ffffff10] bg-surface-container-high cursor-pointer hover:bg-surface-variant transition-colors">
 <input class="w-5 h-5 accent-[#cdf200]" name="shipping" type="radio" value="provincia"/>
 <div class="flex-grow">
 <span class="block font-label-md text-label-md text-secondary">Provincias</span>
-<span class="block font-label-sm text-label-sm text-on-surface-variant">3-5 días hábiles (Agencia)</span>
+<span class="block font-label-sm text-label-sm text-on-surface-variant">Por agencia de transporte</span>
 </div>
-<span class="font-label-md text-label-md text-secondary">S/ 35.00</span>
+<span class="font-label-md text-label-md text-secondary" id="ship-prov-price" style="white-space:nowrap"></span>
 </label>
+<div class="bf-field" hidden id="province-picker">
+<label for="f-department">Departamento de destino</label>
+<select form="delivery-form" id="f-department" name="department"><option value="">Elige el departamento…</option></select>
+<p class="bf-hint" id="province-hint">El costo de envío depende de la distancia desde Lima.</p>
+</div>
 </div>
 </section>
 <!-- Delivery data -->
@@ -206,6 +213,7 @@
 </div>
 <script src="js/products.js"></script>
 <script src="js/cart.js"></script>
+<script src="js/shipping.js"></script>
 <script>
         function cartItemHTML(item) {
             const p = item.product;
@@ -235,10 +243,44 @@
                 </div>`;
         }
 
+        function isProvince() {
+            return document.querySelector('input[name="shipping"]:checked').value === 'provincia';
+        }
+
+        // Destino elegido en provincias (o null si todavía no elige)
+        function getSelectedProvince() {
+            return getProvinceShipping(document.getElementById('f-department').value);
+        }
+
         function getShippingCost() {
-            const selected = document.querySelector('input[name="shipping"]:checked');
-            if (!selected) return 0;
-            return selected.value === 'lima' ? 15 : 35;
+            if (!isProvince()) return SHIPPING_LIMA.price;
+            const destination = getSelectedProvince();
+            return destination ? destination.price : 0;
+        }
+
+        function shippingPending() {
+            return isProvince() && !getSelectedProvince();
+        }
+
+        function initShippingOptions() {
+            document.getElementById('ship-lima-label').textContent = SHIPPING_LIMA.label;
+            document.getElementById('ship-lima-days').textContent = SHIPPING_LIMA.days;
+            document.getElementById('ship-lima-price').textContent = formatPEN(SHIPPING_LIMA.price);
+            document.getElementById('ship-prov-price').textContent = `Desde ${formatPEN(getMinProvincePrice())}`;
+            const select = document.getElementById('f-department');
+            getAllProvinceShipping().forEach((d) => {
+                const option = document.createElement('option');
+                option.value = d.department;
+                option.textContent = `${d.department} - ${formatPEN(d.price)}`;
+                select.appendChild(option);
+            });
+            select.addEventListener('change', () => {
+                const destination = getSelectedProvince();
+                document.getElementById('province-hint').textContent = destination
+                    ? `Tiempo estimado: ${destination.days}, por agencia de transporte.`
+                    : 'El costo de envío depende de la distancia desde Lima.';
+                renderCart();
+            });
         }
 
         function renderCart() {
@@ -263,11 +305,12 @@
             const subtotal = getCartSubtotal();
             const shipping = items.length === 0 ? 0 : getShippingCost();
             const total = subtotal + shipping;
+            const pending = items.length > 0 && shippingPending();
 
             document.getElementById('subtotal-display').textContent = formatPEN(subtotal);
-            document.getElementById('shipping-cost-display').textContent = items.length === 0 ? '--' : formatPEN(shipping);
-            document.getElementById('total-price-display').textContent = formatPEN(total);
-            document.getElementById('floating-total').textContent = formatPEN(total);
+            document.getElementById('shipping-cost-display').textContent = items.length === 0 ? '--' : pending ? 'Elige tu departamento' : formatPEN(shipping);
+            document.getElementById('total-price-display').textContent = formatPEN(total) + (pending ? ' + envío' : '');
+            document.getElementById('floating-total').textContent = formatPEN(total) + (pending ? ' + envío' : '');
         }
 
         document.querySelectorAll('input[name="shipping"]').forEach((radio) => {
@@ -279,8 +322,10 @@
         const ORDER_KEY = 'bicifast_last_order';
 
         function syncDeliveryFields() {
-            const provincia = document.querySelector('input[name="shipping"]:checked').value === 'provincia';
+            const provincia = isProvince();
             const f = document.getElementById('delivery-form').elements;
+            document.getElementById('province-picker').hidden = !provincia;
+            f.department.required = provincia;
             document.getElementById('field-dni').hidden = !provincia;
             document.getElementById('field-agency').hidden = !provincia;
             f.dni.required = provincia;
@@ -308,7 +353,7 @@
         function buildOrderMessage(items, total) {
             const f = document.getElementById('delivery-form').elements;
             const v = (name) => f[name].value.trim();
-            const provincia = document.querySelector('input[name="shipping"]:checked').value === 'provincia';
+            const provincia = isProvince();
             const payment = document.querySelector('input[name="payment"]:checked').value;
             const lines = items.map((item) => `• ${item.qty} x ${describeItem(item)} - ${formatPEN(getItemUnitPrice(item) * item.qty)}`);
             return [
@@ -322,7 +367,7 @@
                 `Dirección: ${v('address')}`,
                 ...(provincia ? [`DNI: ${v('dni')}`, `Agencia: ${v('agency')}`] : []),
                 '',
-                `Envío: ${provincia ? 'Provincias' : 'Lima Metropolitana'} - ${formatPEN(getShippingCost())}`,
+                `Envío: ${provincia ? v('department') + ' (por agencia)' : SHIPPING_LIMA.label} - ${formatPEN(getShippingCost())}`,
                 `Pago preferido: ${PAYMENT_LABELS[payment]}`,
                 `*Total: ${total}*`,
             ].join('\n');
@@ -373,6 +418,7 @@
             showConfirmation(order);
         });
 
+        initShippingOptions();
         renderCart();
         syncDeliveryFields();
         try {

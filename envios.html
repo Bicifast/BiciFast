@@ -34,20 +34,16 @@
 <h1 class="font-headline-lg text-headline-lg text-secondary mb-2">Envíos</h1>
 <p class="font-body-md text-body-md text-on-surface-variant mb-8">Llegamos a todo el Perú. Estos son nuestros costos y tiempos de entrega.</p>
 
-<div class="grid sm:grid-cols-2 gap-4 mb-stack-md">
-<div class="bg-surface-container rounded-xl p-6 border border-outline-variant/30">
+<div class="bg-surface-container rounded-xl p-6 border border-outline-variant/30 mb-stack-md">
 <span class="material-symbols-outlined text-secondary-fixed text-3xl mb-2">local_shipping</span>
-<h2 class="font-headline-md text-headline-md text-secondary mb-1">Lima Metropolitana</h2>
-<p class="font-body-md text-body-md text-on-surface-variant mb-2">1-2 días hábiles</p>
-<p class="font-label-md text-label-md text-secondary-fixed">S/ 15.00</p>
+<h2 class="font-headline-md text-headline-md text-secondary mb-1" id="ship-lima-label">Lima Metropolitana</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-2" id="ship-lima-days"></p>
+<p class="font-label-md text-label-md text-secondary-fixed" id="ship-lima-price"></p>
 </div>
-<div class="bg-surface-container rounded-xl p-6 border border-outline-variant/30">
-<span class="material-symbols-outlined text-secondary-fixed text-3xl mb-2">local_shipping</span>
+
 <h2 class="font-headline-md text-headline-md text-secondary mb-1">Provincias</h2>
-<p class="font-body-md text-body-md text-on-surface-variant mb-2">3-5 días hábiles, por agencia de transporte</p>
-<p class="font-label-md text-label-md text-secondary-fixed">S/ 35.00</p>
-</div>
-</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">Enviamos por agencia de transporte. El costo depende de la distancia desde Lima: eliges tu departamento al comprar y ves el monto exacto antes de pagar.</p>
+<div class="grid sm:grid-cols-2 gap-4 mb-stack-md" id="ship-zones"></div>
 
 <section class="bg-surface-container rounded-xl p-6 border border-outline-variant/30 mb-stack-md">
 <h2 class="font-headline-md text-headline-md text-secondary mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-secondary-fixed">payments</span>Pago contra-entrega</h2>
@@ -67,4 +63,26 @@ Consultar por WhatsApp
 <footer class="border-t border-outline-variant/30 py-stack-lg px-container-margin-mobile text-center">
 <p class="font-label-sm text-label-sm text-on-surface-variant">© 2026 BiciFast Perú. RUC 10426826793</p>
 </footer>
+<script src="js/shipping.js"></script>
+<script>
+  document.getElementById('ship-lima-label').textContent = SHIPPING_LIMA.label;
+  document.getElementById('ship-lima-days').textContent = SHIPPING_LIMA.days;
+  document.getElementById('ship-lima-price').textContent = 'S/ ' + SHIPPING_LIMA.price.toFixed(2);
+  const zones = document.getElementById('ship-zones');
+  SHIPPING_ZONES.forEach((zone) => {
+    const card = document.createElement('div');
+    card.className = 'bg-surface-container rounded-xl p-6 border border-outline-variant/30';
+    const price = document.createElement('p');
+    price.className = 'font-label-md text-label-md text-secondary-fixed mb-1';
+    price.textContent = 'S/ ' + zone.price.toFixed(2);
+    const days = document.createElement('p');
+    days.className = 'font-body-md text-body-md text-on-surface-variant mb-2';
+    days.textContent = zone.days;
+    const list = document.createElement('p');
+    list.className = 'font-label-sm text-label-sm text-secondary';
+    list.textContent = zone.departments.join(', ');
+    card.append(price, days, list);
+    zones.appendChild(card);
+  });
+</script>
 </body></html>
